@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Чайник Vitek</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid ml-auto">
+    <div class="ml-5 mb-3"><h1>Привет, это чайник, написанный на Flask</h1></div>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Just an image -->
+    <div class="row">
+        <div class="col-sm">
+            <img src="https://c.dns-shop.ru/thumb/st4/fit/500/500/9506d8d10adf752f85f315b60651d298/df9877f2b7135e1b9ef97341cd6c2a7f57058b2ea3b89e3a51f7978d0b652c5e.jpg.webp">
+        </div>
+        <div class="col-sm">
+            <div class="card">
+              <div class="card-body">
+                  <h3 class="m-0 font-weight-bold text-primary mb-3">Показатели чайника:</h3>
+                  {% if status %}
+                  <h3>Статус: Вкл</h3>
+                  {% else %}
+                  <h3>Статус: Выкл</h3>
+                  {% endif %}
+                  <h3>Уровень воды: {{ water_level }}</h3>
+                  <h3>Температура воды:<p id="output"></p></h3>
+                  <h3 class="m-0 font-weight-bold text-danger mb-3">{{ error }}</h3>
+              <script>
+                function update(){
+                    $.get("/update", function (data) {
+                        $("#output").html(data)
+                    });
+                }
+                update()
+                var intervalId = setInterval(function() {
+                    update()
+                }, 1000);
+
+            </script>
+              </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Functionality -->
+    <h1 class="m-0 font-weight-bold text-primary mb-3">Действия</h1>
+
+    <!-- Info table -->
+    <form role="form" method = "POST">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tbody>
+                    <tr>
+                        <td><h3>Функции</h3></td>
+                        <td><h3>Описание</h3></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><button class="btn btn-success" type = "submit" value = "Включить" name="on">Включить</button></p>
+                        </td>
+                        <td>Включает чайник</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><button class="btn btn-danger" type = "submit" value = "Выключить" name="off">Выключить</button></p>
+                        </td>
+                        <td>Выключает чайник</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <p><input class="btn btn-success" type = "submit" value = "Налить"></p>
+                                </div>
+                                <div class="col-sm">
+                                    <p><input type = "text" name = "fill"></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>Наливает воду в чайник(значение может быть от 0 до {{ w }})</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><button class="btn btn-secondary" type = "submit" value = "Вылить" name="water_off">Вылить</button></p>
+                        </td>
+                        <td>Выливает воду из чайника</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><button class="btn btn-primary" type = "submit" value = "Вскипятить" name="boil"> Вскипятить</button></p>
+                        </td>
+                        <td>Кипятит чайник(но сначала нужно наполнить его водой и включить)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
